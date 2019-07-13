@@ -10,7 +10,7 @@ resource "aws_instance" "example" {
 
 	user_data = <<-EOF
 				#!/bin/bash
-				echo "Hello Henry World!" > index.html
+				echo "I"m Up > index.html
 				nohup busybox httpd -f -p "${var.server_port}" &
 				EOF	
 
@@ -37,4 +37,19 @@ variable "server_port" {
 
 output "public_ip" {
 	value = "${aws_instance.example.public_ip}"
+}
+
+resource "aws_launch_configuration" "example"{
+	image_id = "ami-40d28157"
+	instance_type = "t2.micro"
+	security_groups = ["{aws_security_group.instance.id}"]
+
+	user_data = <<-EOF
+				#!/bin/bash
+				echo "I'm Up" > index.html
+				nohup busybox httpd -f -p "${var.server_port}" &
+				EOF		
+	lifecycle {
+		create_before_destroy = true
+	}
 }
