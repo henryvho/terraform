@@ -29,3 +29,7 @@ resource "aws_security_group" "instance" {
 		cidr_blocks = ["0.0.0.0/0"]
 	}
 }
+
+variable "server_port" {
+	description = "web server listening port"
+}
